@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+import sys
+import os
+import subprocess
+
+def find_library_name(lib):
+    name = ""
+    if lib.startswith("lib"):
+         name = lib + "-dev"
+    else:
+         name = "lib" + lib + "-dev"
+    return name
+
+def do_installation(name):
+    subprocess.run(['apt', 'install', '-y', name], stdin=None, capture_output=False)
+
+def install_library(lib):
+    if(lib[0] != "-"):
+        name = find_library_name(lib)
+        do_installation(name)
+
+def call_pkg_config(args):
+    res = subprocess.run(['/usr/bin/pkg-config'] + args, stdin=None, capture_output=True)
+    print(res.stdout)
+    sys.exit(res.returncode)
+
+for i in sys.argv[1:-1]:
+    install_library(i)
+
+call_pkg_config(sys.argv)
