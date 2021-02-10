@@ -18,7 +18,7 @@ def do_installation(name):
 
 def install_library(lib):
     if(lib[0] != "-"):
-        name = find_library_name(lib)
+        name = find_library_name(lib.lower())
         do_installation(name)
 
 def call_pkg_config(args):
