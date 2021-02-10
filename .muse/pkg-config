@@ -4,7 +4,7 @@ import os
 import subprocess
 
 def find_library_name(lib):
-    name = lib
+    name = lib.split()[0]
     if(not  name.startswith("lib")):
          name = "lib" + lib
     if(not name.endswith("-dev")):
