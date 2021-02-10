@@ -4,15 +4,17 @@ import os
 import subprocess
 
 def find_library_name(lib):
-    name = ""
-    if lib.startswith("lib"):
-         name = lib + "-dev"
-    else:
-         name = "lib" + lib + "-dev"
+    name = lib
+    if(not  name.startswith("lib")):
+         name = "lib" + lib
+    if(not name.endswith("-dev")):
+        name = name + "-dev"
     return name
 
 def do_installation(name):
-    subprocess.run(['apt', 'install', '-y', name], stdin=None, capture_output=False)
+    # sys.stderr.write("Installing library: " + name + "\n")
+    res=subprocess.run(['apt', 'install', '-y', name], stdin=None, capture_output=False)
+    # sys.stderr.write("Code: " + str(res.returncode) + "\n")
 
 def install_library(lib):
     if(lib[0] != "-"):
@@ -20,11 +22,15 @@ def install_library(lib):
         do_installation(name)
 
 def call_pkg_config(args):
-    res = subprocess.run(['/usr/bin/pkg-config'] + args, stdin=None, capture_output=True)
-    print(res.stdout)
+    res = subprocess.run(['/usr/bin/pkg-config'] + args[1:], stdin=None, capture_output=True)
+    # sys.stderr.write("Err: " + res.stderr.decode("utf-8"))
+    # sys.stderr.write(" Out: " + res.stdout.decode("utf-8"))
+    # sys.stderr.write(" Code: " + str(res.returncode) + "\n")
+    print(res.stdout.decode("utf-8"))
     sys.exit(res.returncode)
 
-for i in sys.argv[1:-1]:
+for i in sys.argv[1:]:
+    sys.stderr.write("Considering: " + i + "\n")
     install_library(i)
 
 call_pkg_config(sys.argv)
