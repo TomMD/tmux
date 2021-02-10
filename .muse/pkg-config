@@ -13,7 +13,7 @@ def find_library_name(lib):
 
 def do_installation(name):
     # sys.stderr.write("Installing library: " + name + "\n")
-    res=subprocess.run(['apt', 'install', '-y', name], stdin=None, capture_output=False)
+    res=subprocess.run(['apt', 'install', '-y', name], stdin=None, capture_output=True)
     # sys.stderr.write("Code: " + str(res.returncode) + "\n")
 
 def install_library(lib):
@@ -26,7 +26,7 @@ def call_pkg_config(args):
     # sys.stderr.write("Err: " + res.stderr.decode("utf-8"))
     # sys.stderr.write(" Out: " + res.stdout.decode("utf-8"))
     # sys.stderr.write(" Code: " + str(res.returncode) + "\n")
-    print(res.stdout.decode("utf-8"))
+    sys.stdout.write(res.stdout.decode("utf-8"))
     sys.exit(res.returncode)
 
 for i in sys.argv[1:]:
